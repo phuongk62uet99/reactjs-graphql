@@ -1,7 +1,22 @@
 import React, { Fragment } from 'react';
 import Card from 'react-bootstrap/Card';
+import { getSingleBook } from '../graphql-client/queries'
+import { useQuery } from '@apollo/client'
 
 const BookDetails = ({ bookId }) => {
+    console.log(bookId);
+    const { loading, error, data } = useQuery(getSingleBook, {
+		variables: {
+			id: bookId
+		},
+		skip: bookId === null
+	})
+
+    if (loading) return <p>Loading book details...</p>
+
+	if (error) {
+		return <p>Error loading book details!</p>
+	}
 
 	return (
 		<Card bg='info' text='white' className='shadow'>

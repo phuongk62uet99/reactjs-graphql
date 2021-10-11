@@ -5,40 +5,36 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import BookDetails from './BookDetails';
 
+import { useQuery } from '@apollo/client'
+import { getBooks } from '../graphql-client/queries'
+
 const BookList = () => {
-	const [bookSelected, setBookSelected] = useState(null)
+	const [bookSelected, setBookSelected] = useState(null);
+
+    const { loading, error, data } = useQuery(getBooks);
+
+    if (loading) return <p>Loading book details...</p>
+
+	if (error) {
+		return <p>Error loading book details!</p>
+	}
 
 	return (
 		<Row>
 			<Col xs={8}>
 				<CardColumns>
-                    <Card
-                        border='info'
-                        text='info'
-                        className='text-center shadow'
-                        key="123"
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <Card.Body>"Những người khốn khổ</Card.Body>
-                    </Card>
-					<Card
-                        border='info'
-                        text='info'
-                        className='text-center shadow'
-                        key="123"
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <Card.Body>"Những người khốn khổ</Card.Body>
-                    </Card>
-					<Card
-                        border='info'
-                        text='info'
-                        className='text-center shadow'
-                        key="123"
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <Card.Body>"Những người khốn khổ</Card.Body>
-                    </Card>
+                    {data?.books.map(book => (
+                        <Card
+                            border='info'
+                            text='info'
+                            className='text-center shadow'
+                            key={book.id}
+                            onClick={() => setBookSelected(book.id)}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Card.Body>{book.name}</Card.Body>
+                        </Card>
+                    ))}
 				</CardColumns>
 			</Col>
 			<Col>
