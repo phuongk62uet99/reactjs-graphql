@@ -10,7 +10,8 @@ const BookDetails = ({ bookId }) => {
 			id: bookId
 		},
 		skip: bookId === null
-	})
+	});
+    console.log(data);
 
     if (loading) return <p>Loading book details...</p>
 
@@ -21,17 +22,22 @@ const BookDetails = ({ bookId }) => {
 	return (
 		<Card bg='info' text='white' className='shadow'>
 			<Card.Body>
-                <Fragment>
-                    <Card.Title>Số đỏ</Card.Title>
-                    <Card.Subtitle>Năm xuất bản</Card.Subtitle>
-                    <p>Nam cao</p>
-                    <p>Age: 70</p>
-                    <p>All books by this author</p>
-                    <ul>
-                        <li key="1">Chị dậu</li>
-                        <li key="1">Chị dậu</li>
-                    </ul>
-                </Fragment>
+                {data === null ? 
+                    <Card.Text>Please select a book</Card.Text>
+                    : (
+                        <Fragment>
+                            <Card.Title>Tên sách : {data?.book.name}</Card.Title>
+                            <Card.Subtitle>Lần xuất bản : {data?.book.genre}</Card.Subtitle>
+                            <p>Tác giả : {data?.book.author.name}</p>
+                            <p>Tuổi: {data?.book.author.age}</p>
+                            <p>All books by this author</p>
+                            <ul>
+                                {data?.book.author.books.map(book => {
+                                    <li key={book.id}>{book.name}</li>
+                                })}
+                            </ul>
+                        </Fragment>
+                    )}
 			</Card.Body>
 		</Card>
 	)
