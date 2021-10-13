@@ -20,7 +20,7 @@ const BookForm = () => {
 	// console.log('loading : ', loading);
 
 	const [addBook, dataMutation] = useMutation(addSingleBook);
-	console.log(dataMutation);
+	// console.log(dataMutation);
 
 	const onInputChange = event => {
         // console.log(event);
