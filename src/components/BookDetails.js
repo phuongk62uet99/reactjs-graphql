@@ -4,14 +4,12 @@ import { getSingleBook } from '../graphql-client/queries'
 import { useQuery } from '@apollo/client'
 
 const BookDetails = ({ bookId }) => {
-    console.log(bookId);
     const { loading, error, data } = useQuery(getSingleBook, {
 		variables: {
 			id: bookId
 		},
 		skip: bookId === null
 	});
-    console.log(data);
 
     if (loading) return <p>Loading book details...</p>
 
@@ -19,22 +17,24 @@ const BookDetails = ({ bookId }) => {
 		return <p>Error loading book details!</p>
 	}
 
+    var books = bookId === null ? null : data.book;
+
 	return (
 		<Card bg='info' text='white' className='shadow'>
 			<Card.Body>
-                {data === null ? 
+                {books === null ? 
                     <Card.Text>Please select a book</Card.Text>
                     : (
                         <Fragment>
-                            <Card.Title>Tên sách : {data?.book.name}</Card.Title>
-                            <Card.Subtitle>Lần xuất bản : {data?.book.genre}</Card.Subtitle>
-                            <p>Tác giả : {data?.book.author.name}</p>
-                            <p>Tuổi: {data?.book.author.age}</p>
+                            <Card.Title>Tên sách : {books.name}</Card.Title>
+                            <Card.Subtitle>Lần xuất bản : {books.genre}</Card.Subtitle>
+                            <p>Tác giả : {books.author.name}</p>
+                            <p>Tuổi: {books.author.age}</p>
                             <p>All books by this author</p>
                             <ul>
-                                {data?.book.author.books.map(book => {
+                                {books?.author.books.map(book => (
                                     <li key={book.id}>{book.name}</li>
-                                })}
+                                ))}
                             </ul>
                         </Fragment>
                     )}
